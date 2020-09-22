@@ -6,23 +6,32 @@ use Freedom\Sanitizer\Contracts\Sanitization;
 
 trait WithSanitizer {
 
-    public function sanitize(array $attributes, $sanitizer) : array {
-        if (!$sanitizer instanceof Sanitization) {
-            $sanitizer = $this->makeSanitizer($sanitizer);
+    protected $sanitizer;
+
+    public abstract function sanitizer() : string;
+
+    public function sanitize(array $attributes) : array {
+        if(!$this->sanitizer){
+            $this->makeSanitizer();
         }
-        return $sanitizer->sanitize($attributes);
+        return $this->sanitizer->sanitize($attributes);
     }
 
-    public function makeSanitizer($sanitizer_class)
-    {
-        $sanitizer = is_string($sanitizer_class) ? app()->make($sanitizer_class) : $sanitizer_class;
+    public function getSanitizedValue($key,$value){
+        if(!$this->sanitizer){
+            $this->makeSanitizer();
+        }
+        return $this->sanitizer->getSanitizedValue($key,$value);
+    }
+
+    public function makeSanitizer(){
+        $sanitizer = app()->make($this->sanitizer());
         if (!$sanitizer instanceof Sanitization) {
             throw new \Freedom\Sanitizer\Exceptions\SanitizerException(
-                "Class {$sanitizer_class} must be an instance of Freedom\Sanitizer\Contracts\Sanitization"
+                "Class {$this->sanitizer()} must be an instance of Freedom\Sanitizer\Contracts\Sanitization"
             );
         }
-        return $sanitizer;
+        return $this->sanitizer = $sanitizer;;
     }
-
 }
 
