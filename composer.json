@@ -1,0 +1,28 @@
+{
+    "name": "freedom/input-sanitizer",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Allen Jay Desamparado",
+            "email": "ajDesamparado13@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+     "autoload": {
+       "psr-4": {
+         "Freedom\\Sanitizer\\": "src/Sanitizer/"
+       }
+     },
+     "extra": {
+       "laravel": {
+         "providers": [
+           "Freedom\\Sanitizer\\Providers\\LaravelServiceProvider"
+         ]
+       }
+     },
+     "require": {
+       "illuminate/config": "~5.0|~6.0|~7.0",
+       "illuminate/support": "~5.0|~6.0|~7.0",
+       "illuminate/contracts": "~5.0|~6.0|~7.0"
+     }
+}
